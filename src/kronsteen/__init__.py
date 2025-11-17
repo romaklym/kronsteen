@@ -21,6 +21,15 @@ from .window_monitor import (
     start_window_monitoring,
     stop_window_monitoring,
 )
+from .vision import (
+    VisionClient,
+    Detection,
+    Segmentation,
+    Classification,
+    detect_objects,
+    segment_objects,
+    classify_image,
+)
 
 __all__ = [
     "__version__",
@@ -75,6 +84,13 @@ __all__ = [
     "get_window_monitor",
     "is_window_active",
     "get_active_window_title",
+    "VisionClient",
+    "Detection",
+    "Segmentation",
+    "Classification",
+    "detect_objects",
+    "segment_objects",
+    "classify_image",
 ]
 
 _default_client = Kronsteen()

@@ -46,6 +46,7 @@ Kronsteen combines **computer vision (OCR)** with **human-like automation** to i
 | Feature | Description |
 |---------|-------------|
 | **🔍 OCR Text Finding** | Find and click text anywhere on screen using Tesseract OCR |
+| **🤖 AI Vision (NEW!)** | YOLO object detection, segmentation & classification |
 | **🖼️ Template Matching** | Match images and click on them with confidence thresholds |
 | **🚀 Universal Launcher** | Launch apps by name on any platform (no paths needed) |
 | **🖱️ Mouse & Keyboard** | Full control with human-like timing and movements |
@@ -62,6 +63,7 @@ kronsteen/
 ├── 🎯 client.py              # Main orchestrator
 ├── 🔍 ocr_tesseract.py       # Tesseract OCR engine (Retina support)
 ├── 🖼️ ocr.py                 # DeepSeek OCR engine (GPU/CPU)
+├── 🤖 vision.py              # YOLO object detection & segmentation
 ├── 🎪 finders.py             # Text/image/template finding
 ├── 🎬 actions.py             # Mouse/keyboard automation
 ├── 🚀 launcher.py            # Cross-platform app launcher
@@ -96,14 +98,21 @@ sudo apt update && sudo apt install tesseract-ocr
 pip install kronsteen
 ```
 
-This installs all Python dependencies:
+**That's it!** One command installs everything:
+
+**Core Automation:**
 - `pyautogui` - Mouse and keyboard automation
 - `pytesseract` - Python wrapper for Tesseract
 - `opencv-python` - Computer vision and template matching
 - `Pillow` - Image processing
 - `numpy` - Numerical operations
 
-✅ **Done!** Start automating in seconds.
+**AI Vision (Included!):**
+- `ultralytics` - YOLO models (YOLOv8, YOLOv9, YOLOv10, YOLOv11)
+- `torch` - PyTorch deep learning framework
+- `roboflow` - Custom model integration
+
+✅ **Done!** OCR + AI Vision + Automation in one package!
 
 ---
 
@@ -157,6 +166,145 @@ kronsteen.press("tab")
 kronsteen.type_text("martini_shaken")
 kronsteen.press("enter")
 ```
+
+---
+
+## 🤖 AI Vision (NEW!)
+
+Kronsteen now includes state-of-the-art computer vision powered by YOLO models!
+
+### 🎯 Object Detection
+
+Detect and interact with any object on screen:
+
+```python
+import kronsteen
+
+# Initialize vision client
+vision = kronsteen.VisionClient(
+    model="yolov8n.pt",  # Fast, lightweight model
+    task="detect",
+    confidence_threshold=0.5
+)
+
+# Take screenshot
+screenshot = kronsteen.screenshot()
+
+# Detect all objects
+detections = vision.detect(screenshot)
+for det in detections:
+    print(f"{det.class_name}: {det.confidence:.2%} at {det.center}")
+
+# Detect specific objects
+people = vision.detect(screenshot, classes=["person", "car"])
+print(f"Found {len(people)} people or cars")
+
+# Find and click on object
+if vision.find_and_click(screenshot, "button", min_confidence=0.7):
+    print("✅ Clicked on button!")
+```
+
+### ✂️ Image Segmentation
+
+Get pixel-perfect masks for objects:
+
+```python
+# Initialize segmentation model
+vision = kronsteen.VisionClient(
+    model="yolov8n-seg.pt",
+    task="segment"
+)
+
+# Segment objects
+segments = vision.segment(screenshot, classes=["person"])
+for seg in segments:
+    print(f"{seg.class_name} - Mask shape: {seg.mask.shape}")
+    # Use seg.mask for pixel-perfect interaction
+```
+
+### 🏷️ Image Classification
+
+Classify entire screenshots or regions:
+
+```python
+# Initialize classification model
+vision = kronsteen.VisionClient(
+    model="yolov8n-cls.pt",
+    task="classify"
+)
+
+# Classify image (get top 3 predictions)
+results = vision.classify(screenshot, top_k=3)
+for result in results:
+    print(f"{result.class_name}: {result.confidence:.2%}")
+```
+
+### 🎨 Custom Models (Roboflow)
+
+Use your own trained models:
+
+```python
+# Set your Roboflow API key
+import os
+os.environ["ROBOFLOW_API_KEY"] = "your_api_key"
+
+# Load custom model
+vision = kronsteen.VisionClient(
+    model="workspace/project/1",  # Your Roboflow model
+    task="detect"
+)
+
+# Detect custom objects
+detections = vision.detect(screenshot)
+```
+
+### ⚡ Quick Vision Functions
+
+For one-off detections:
+
+```python
+# Quick object detection
+detections = kronsteen.detect_objects(
+    screenshot,
+    model="yolov8n.pt",
+    classes=["person", "car"],
+    confidence=0.5
+)
+
+# Quick segmentation
+segments = kronsteen.segment_objects(
+    screenshot,
+    model="yolov8n-seg.pt"
+)
+
+# Quick classification
+results = kronsteen.classify_image(
+    screenshot,
+    model="yolov8n-cls.pt",
+    top_k=3
+)
+```
+
+### 🎯 Available YOLO Models
+
+**Detection Models:**
+- `yolov8n.pt` - Nano (6MB, fastest)
+- `yolov8s.pt` - Small (22MB)
+- `yolov8m.pt` - Medium (52MB)
+- `yolov8l.pt` - Large (88MB)
+- `yolov8x.pt` - Extra Large (136MB, most accurate)
+
+**Segmentation Models:**
+- `yolov8n-seg.pt` - Nano segmentation
+- `yolov8s-seg.pt` - Small segmentation
+- `yolov8m-seg.pt` - Medium segmentation
+
+**Classification Models:**
+- `yolov8n-cls.pt` - Nano classification
+- `yolov8s-cls.pt` - Small classification
+
+**COCO Classes (80 objects):**
+person, bicycle, car, motorcycle, airplane, bus, train, truck, boat, traffic light, fire hydrant, stop sign, parking meter, bench, bird, cat, dog, horse, sheep, cow, elephant, bear, zebra, giraffe, backpack, umbrella, handbag, tie, suitcase, frisbee, skis, snowboard, sports ball, kite, baseball bat, baseball glove, skateboard, surfboard, tennis racket, bottle, wine glass, cup, fork, knife, spoon, bowl, banana, apple, sandwich, orange, broccoli, carrot, hot dog, pizza, donut, cake, chair, couch, potted plant, bed, dining table, toilet, tv, laptop, mouse, remote, keyboard, cell phone, microwave, oven, toaster, sink, refrigerator, book, clock, vase, scissors, teddy bear, hair drier, toothbrush
 
 ---
 
