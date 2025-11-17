@@ -35,6 +35,7 @@ Kronsteen combines **computer vision (OCR)** with **human-like automation** to i
 - ⚡ **Fast** - Tesseract OCR processes screens in ~100ms
 - 🛡️ **Reliable** - Built-in error handling and logging
 - 🌍 **Cross-Platform** - macOS, Windows, Linux support
+- 📐 **Resolution-Independent** - Works on any screen size or DPI automatically
 
 ---
 
@@ -563,6 +564,42 @@ ocr = TesseractOCRClient()
 print(f"Scale factor: {ocr.scale_factor}")  # Should be 2.0 on Retina
 ```
 
+### Different Screen Resolutions
+
+**How Kronsteen handles different screens:**
+
+✅ **Works automatically:**
+- Different screen sizes (1920x1080, 2560x1440, 4K, etc.)
+- Retina vs non-Retina displays
+- Multiple monitors (uses active screen)
+- Dynamic resolution changes
+
+**How it works:**
+1. OCR reads text from **current screen** in real-time
+2. Coordinates are **relative to current screen size**
+3. No hardcoded positions - everything is dynamic
+
+**Example:**
+```python
+# This works on ANY screen resolution
+kronsteen.click_on_text("Login")  # Finds "Login" wherever it is
+
+# Screen size is detected automatically
+width, height = kronsteen.get_screen_size()
+print(f"Your screen: {width}x{height}")
+```
+
+⚠️ **Limitation: Template Matching**
+Pre-captured template images may not match on different resolutions. Solution:
+```python
+# Use OCR instead of templates for cross-resolution compatibility
+kronsteen.click_on_text("Button")  # ✅ Works on any resolution
+
+# Or capture templates at runtime
+template = kronsteen.screenshot(region=(100, 100, 200, 150))
+kronsteen.click_on_template(template)  # ✅ Works
+```
+
 ### Window Focus Not Working
 
 ```python
@@ -649,10 +686,10 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ### *"The perfect automation is invisible"*
 
-**Made with ❤️ by automation enthusiasts**
+**Made with ❤️ by [Roman Klym](https://github.com/romaklym)**
 
 **Star ⭐ this repo if you find it useful!**
 
-[Report Bug](https://github.com/yourusername/kronsteen/issues) · [Request Feature](https://github.com/yourusername/kronsteen/issues) · [Documentation](https://github.com/yourusername/kronsteen)
+[Report Bug](https://github.com/romaklym/kronsteen/issues) · [Request Feature](https://github.com/romaklym/kronsteen/issues) · [Documentation](https://github.com/romaklym/kronsteen)
 
 </div>
