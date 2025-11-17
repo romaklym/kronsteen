@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kronsteen"
-version = "0.1.0"
-description = "Vision-aware desktop automation toolkit powered by PyAutoGUI and DeepSeek OCR."
+version = "0.1.1"
+description = "Vision-powered desktop automation framework with OCR text recognition using Tesseract."
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [
-  { name = "Roman Klym", email = "roman@example.com" },
-  { name = "Codex" }
+  { name = "Roman Klym", email = "klymroman@protonmail.com" },
+  { name = "Roman" }
 ]
 keywords = ["automation", "pyautogui", "ocr", "desktop", "testing"]
 classifiers = [
@@ -41,9 +41,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/romanklym/kronsteen"
-Documentation = "https://github.com/romanklym/kronsteen"
-Source = "https://github.com/romanklym/kronsteen"
+Homepage = "https://github.com/romaklym/kronsteen"
+Documentation = "https://github.com/romaklym/kronsteen"
+Source = "https://github.com/romaklym/kronsteen"
 
 [tool.setuptools.packages.find]
 where = ["src"]
