@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kronsteen"
+version = "0.1.0"
+description = "Vision-aware desktop automation toolkit powered by PyAutoGUI and DeepSeek OCR."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "Roman Klym", email = "roman@example.com" },
+  { name = "Codex" }
+]
+keywords = ["automation", "pyautogui", "ocr", "desktop", "testing"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: OS Independent",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Utilities"
+]
+dependencies = [
+  "pyautogui>=0.9.54",
+  "Pillow>=10.0.0",
+  "numpy>=1.24",
+  "typing_extensions>=4.9",
+  "opencv-python>=4.9.0",
+  "pytesseract>=0.3.10"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.4",
+  "mypy>=1.7",
+  "ruff>=0.1.5"
+]
+
+[project.urls]
+Homepage = "https://github.com/romanklym/kronsteen"
+Documentation = "https://github.com/romanklym/kronsteen"
+Source = "https://github.com/romanklym/kronsteen"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+kronsteen = ["py.typed"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra"
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+select = ["E", "F", "I", "UP", "B", "C4", "TID"]
+
+[tool.ruff.isort]
+known-first-party = ["kronsteen"]
+profile = "black"
